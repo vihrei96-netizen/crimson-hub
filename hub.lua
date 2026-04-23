@@ -1,4 +1,4 @@
--- CRIMSON HUB (FIXED)
+-- CRIMSON HUB (DARK MODE)
 
 local UIS = game:GetService("UserInputService")
 
@@ -9,16 +9,30 @@ local UIListLayout = Instance.new("UIListLayout")
 
 ScreenGui.Parent = game.CoreGui
 
--- Frame principal
+-- Frame principal (fundo preto)
 Frame.Parent = ScreenGui
-Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- fundo preto
+Frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
 Frame.Position = UDim2.new(0.1, 0, 0.2, 0)
 Frame.Size = UDim2.new(0, 250, 0, 300)
 
--- Drag manual (funciona em qualquer executor)
-local dragging, dragInput, dragStart, startPos
+-- Barra de topo (pra arrastar)
+Toggle.Parent = ScreenGui
+Toggle.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Toggle.Position = UDim2.new(0.1, 0, 0.15, 0)
+Toggle.Size = UDim2.new(0, 250, 0, 30)
+Toggle.Text = "CRIMSON HUB"
+Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-Frame.InputBegan:Connect(function(input)
+-- Layout
+UIListLayout.Parent = Frame
+UIListLayout.Padding = UDim.new(0, 5)
+
+-- Drag pelo botão (funciona melhor)
+local dragging = false
+local dragStart
+local startPos
+
+Toggle.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 then
 		dragging = true
 		dragStart = input.Position
@@ -32,14 +46,8 @@ Frame.InputBegan:Connect(function(input)
 	end
 end)
 
-Frame.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement then
-		dragInput = input
-	end
-end)
-
 UIS.InputChanged:Connect(function(input)
-	if input == dragInput and dragging then
+	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
 		local delta = input.Position - dragStart
 		Frame.Position = UDim2.new(
 			startPos.X.Scale,
@@ -50,24 +58,12 @@ UIS.InputChanged:Connect(function(input)
 	end
 end)
 
--- Botão toggle
-Toggle.Parent = ScreenGui
-Toggle.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
-Toggle.Position = UDim2.new(0.1, 0, 0.15, 0)
-Toggle.Size = UDim2.new(0, 250, 0, 30)
-Toggle.Text = "CRIMSON HUB"
-Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
-
--- Layout
-UIListLayout.Parent = Frame
-UIListLayout.Padding = UDim.new(0, 5)
-
--- Criar botão
+-- Função botão
 local function criarBotao(nome, callback)
 	local Button = Instance.new("TextButton")
 	Button.Parent = Frame
 	Button.Size = UDim2.new(1, 0, 0, 40)
-	Button.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
+	Button.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 	Button.Text = nome
 	Button.TextColor3 = Color3.fromRGB(255, 255, 255)
 
@@ -110,5 +106,7 @@ criarBotao("🧍 Emotes", function()
 end)
 
 criarBotao("🗡️ AOT Revolution", function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/LunarZR/bomba/refs/heads/main/AOTR1"))()
+end)criarBotao("🗡️ AOT Revolution", function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/LunarZR/bomba/refs/heads/main/AOTR1"))()
 end)
