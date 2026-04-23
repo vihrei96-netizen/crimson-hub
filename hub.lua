@@ -1,4 +1,4 @@
--- CRIMSON HUB (FINAL FIX)
+-- CRIMSON HUB (FINAL + BOLINHA)
 
 local UIS = game:GetService("UserInputService")
 
@@ -10,18 +10,30 @@ local UIListLayout = Instance.new("UIListLayout")
 
 ScreenGui.Parent = game.CoreGui
 
+-- 🔴 BOLINHA (NOVO)
+local Circle = Instance.new("ImageButton")
+Circle.Parent = ScreenGui
+Circle.Size = UDim2.new(0,50,0,50)
+Circle.Position = UDim2.new(0.1,0,0.2,0)
+Circle.BackgroundColor3 = Color3.fromRGB(25,25,25)
+Circle.Image = "rbxassetid://96002544221425"
+Circle.Visible = false
+
+local CircleCorner = Instance.new("UICorner")
+CircleCorner.CornerRadius = UDim.new(1,0)
+CircleCorner.Parent = Circle
+
 -- Frame principal
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(15,15,15)
 MainFrame.Position = UDim2.new(0.1,0,0.2,0)
 MainFrame.Size = UDim2.new(0,250,0,300)
 
--- Borda arredondada
 local MainCorner = Instance.new("UICorner")
-MainCorner.CornerRadius = UDim.new(0, 10)
+MainCorner.CornerRadius = UDim.new(0,10)
 MainCorner.Parent = MainFrame
 
--- Barra topo
+-- Topo
 TopBar.Parent = MainFrame
 TopBar.BackgroundColor3 = Color3.fromRGB(25,25,25)
 TopBar.Size = UDim2.new(1,0,0,30)
@@ -29,7 +41,7 @@ TopBar.Text = "CRIMSON HUB"
 TopBar.TextColor3 = Color3.fromRGB(255,255,255)
 
 local TopCorner = Instance.new("UICorner")
-TopCorner.CornerRadius = UDim.new(0, 10)
+TopCorner.CornerRadius = UDim.new(0,10)
 TopCorner.Parent = TopBar
 
 -- Scroll
@@ -39,7 +51,6 @@ Scroll.Size = UDim2.new(1,0,1,-30)
 Scroll.BackgroundTransparency = 1
 Scroll.ScrollBarThickness = 4
 
--- Layout
 UIListLayout.Parent = Scroll
 UIListLayout.Padding = UDim.new(0,5)
 
@@ -47,7 +58,7 @@ UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
 	Scroll.CanvasSize = UDim2.new(0,0,0,UIListLayout.AbsoluteContentSize.Y + 10)
 end)
 
--- DRAG UNIVERSAL
+-- DRAG HUB (UNIVERSAL)
 local dragging = false
 local dragInput, dragStart, startPos
 
@@ -90,7 +101,39 @@ UIS.InputChanged:Connect(function(input)
 	end
 end)
 
--- Criar botão
+-- DRAG BOLINHA (UNIVERSAL)
+local draggingCircle = false
+local dragStartCircle, startPosCircle
+
+Circle.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1
+	or input.UserInputType == Enum.UserInputType.Touch then
+		
+		draggingCircle = true
+		dragStartCircle = input.Position
+		startPosCircle = Circle.Position
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				draggingCircle = false
+			end
+		end)
+	end
+end)
+
+UIS.InputChanged:Connect(function(input)
+	if draggingCircle then
+		local delta = input.Position - dragStartCircle
+		Circle.Position = UDim2.new(
+			startPosCircle.X.Scale,
+			startPosCircle.X.Offset + delta.X,
+			startPosCircle.Y.Scale,
+			startPosCircle.Y.Offset + delta.Y
+		)
+	end
+end)
+
+-- BOTÕES
 local function criarBotao(nome, callback)
 	local Button = Instance.new("TextButton")
 	Button.Parent = Scroll
@@ -100,16 +143,64 @@ local function criarBotao(nome, callback)
 	Button.TextColor3 = Color3.fromRGB(255,255,255)
 
 	local Corner = Instance.new("UICorner")
-	Corner.CornerRadius = UDim.new(0, 8)
+	Corner.CornerRadius = UDim.new(0,8)
 	Corner.Parent = Button
 
 	Button.MouseButton1Click:Connect(callback)
 end
 
--- 🔥 TOGGLE CORRIGIDO (minimiza de verdade)
+-- 🔥 TOGGLE NOVO (vira bolinha)
 local aberto = true
+
 TopBar.MouseButton1Click:Connect(function()
 	aberto = not aberto
+	
+	if aberto then
+		MainFrame.Visible = true
+		Circle.Visible = false
+	else
+		MainFrame.Visible = false
+		Circle.Visible = true
+	end
+end)
+
+Circle.MouseButton1Click:Connect(function()
+	MainFrame.Visible = true
+	Circle.Visible = false
+	aberto = true
+end)
+
+-- =========================
+-- SCRIPTS
+-- =========================
+
+criarBotao("🍎 Blox Fruits", function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/debunked69/Solixreworkkeysystem/refs/heads/main/solix%20new%20keyui.lua"))()
+end)
+
+criarBotao("🌍 Universal Hub", function()
+	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-MicrowaveHub-The-BEST-Universal-hub-EVER-76950"))()
+end)
+
+criarBotao("🎯 Aimbot FPS", function()
+	loadstring(game:HttpGet("https://rawscripts.net/raw/FPS-Flick-DINAS-PROJECT-AIMBOT-ESP-70584"))()
+end)
+
+criarBotao("⚔️ UAOT", function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/UAOT/refs/heads/main/PhantomFlux"))()
+end)
+
+criarBotao("🏴 Sailor Piece", function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/kaisenlmao/loader/refs/heads/main/chiyo.lua"))()
+end)
+
+criarBotao("🧍 Emotes", function()
+	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Vexro-Emotes-69231"))()
+end)
+
+criarBotao("🗡️ AOT Revolution", function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/LunarZR/bomba/refs/heads/main/AOTR1"))()
+end)	aberto = not aberto
 	
 	if aberto then
 		MainFrame.Size = UDim2.new(0,250,0,300)
